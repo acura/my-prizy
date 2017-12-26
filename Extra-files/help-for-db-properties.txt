@@ -1,0 +1,15 @@
+put this lines to <<prizy-config.properties>> file
+
+for mysql -
+dataSource.dbCreate=update
+dataSource.driverClassName=com.mysql.jdbc.Driver
+dataSource.url=jdbc:mysql://localhost:3306/prizydb?autoReconnect=true&useSSL=false
+dataSource.username=root
+dataSource.password=java
+
+for postgresql -
+dataSource.dbCreate=update
+dataSource.driverClassName=org.postgresql.Driver
+dataSource.url=jdbc:postgresql://localhost/prizydb
+dataSource.username=postgres
+dataSource.password=java
