@@ -53,7 +53,8 @@ class PriceController {
 	
     @Transactional(readOnly = false)
     def save(Price p) {
-		String barcode = params.product.barcode
+		Product product = params.product
+		String barcode = (product!=null)?product.barcode:""
 		BigDecimal price = p.getPrice()
 		Product pro = Product.get(barcode)
 		Price priceInstance = new Price(price: price, product: pro)

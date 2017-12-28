@@ -21,7 +21,6 @@ class ProductService {
 	}
 	
 	def synchronized saveProduct(Product product) {
-		println "saveProduct............................................."
 		try {
 			product.save(flush: true, failOnError: true)
 			return false;
@@ -31,11 +30,6 @@ class ProductService {
 	}
 	
 	def synchronized updateProduct(Product product) {
-		println "update product"
-		println product.getBarcode()
-		println product.getProductName()
-		println product.getDescription()
-
 		Boolean res = Product.executeQuery("UPDATE Product p SET p.description="
 			+product.getDescription()+", p.productName="+product.getProductName()
 			+" WHERE barcode='"+product.getBarcode()+"'")

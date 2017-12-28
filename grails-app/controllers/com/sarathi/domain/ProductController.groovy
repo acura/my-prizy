@@ -17,6 +17,7 @@ class ProductController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+		int n = Product.count() 
 		respond productService.listProducts(params), model:[productInstanceCount: Product.count()]
     }
 	
@@ -90,9 +91,13 @@ class ProductController {
 			productInstance.save(flush: true, failOnError: true)
 			
 			String priceList = params.priceList
-			priceList.trim()
-			priceList.replace(" ", "")
-			List<String> tempPriceList = Arrays.asList(priceList.split(","));
+			List<String> tempPriceList = new ArrayList<>()
+			if(null != priceList) {
+				priceList.trim()
+				priceList.replace(" ", "")
+				tempPriceList = Arrays.asList(priceList.split(","));
+			}
+			
 			productService.saveListOfPrices(tempPriceList, productInstance)
 		} catch(org.springframework.dao.DuplicateKeyException e) {
 			println "exception block==========================="
@@ -155,16 +160,14 @@ class ProductController {
     @Transactional(readOnly=false)
     def update(Product productInstance) {
 		
-		String barcode = params.barcode
-		String productName = params.productName
-		String description = params.description
-		productInstance = Product.get(barcode)
-		println productInstance
-		productInstance.productName =productName
-		productInstance.description = description
+		productInstance = Product.get(params.barcode)
+		
         if (productInstance == null) {
             notFound()
             return
+        } else {
+			productInstance.productName =params.productName
+			productInstance.description = params.description
         }
 
         if (productInstance.hasErrors()) {
