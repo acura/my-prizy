@@ -1,18 +1,14 @@
 package com.sarathi.domain
 
-import java.util.List;
+import grails.transaction.Transactional
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
 import com.sarathi.reflection.ReflectionHelper
 import com.sarathi.strategy.PricingStategy
-
-import grails.transaction.Transactional
 
 @Transactional
 class ProductService {
 
-    def priceService
-	
     def serviceMethod() {
     }
 	
@@ -23,14 +19,18 @@ class ProductService {
 	def synchronized saveProduct(Product product) {
 		try {
 			product.save(flush: true, failOnError: true)
-			return false;
-		} catch(MySQLIntegrityConstraintViolationException e) {
 			return true;
+		} catch(MySQLIntegrityConstraintViolationException e) {
+			throw e
 		}
 	}
 	
-	def synchronized updateProduct(Product product) {
-		Boolean res = Product.executeQuery("UPDATE Product p SET p.description="
+	def synchronized savePrice(Price price) {
+		return price.save()
+	}
+	
+	def synchronized updateProduct(Product product) {		
+		Boolean res = Product.executeUpdate("UPDATE Product p SET p.description="
 			+product.getDescription()+", p.productName="+product.getProductName()
 			+" WHERE barcode='"+product.getBarcode()+"'")
 		return res
@@ -41,13 +41,35 @@ class ProductService {
 	}
 	
 	def synchronized getPrice(Product product, PricingStategy ref) {
-		List<BigDecimal> prices = priceService.listPricesByProduct(product)
+		List<BigDecimal> prices = listPricesByProduct(product)
 		return ref.calculate(prices)
 	}
 	
+	def synchronized listPricesByProduct(Product p) {
+		def criteria = Price.createCriteria()
+		List<BigDecimal> result = criteria.list(){
+			eq("product", p)
+			projections {
+				property("price")
+			}
+		}
+		return result;
+	}
+	
 	def synchronized getPriceByProductId(int productId, PricingStategy ref) {
-		List<Price> prices = priceService.listPricesByProductId(productId)
+		List<Price> prices = listPricesByProductId(productId)
 		return ref.calculate(prices)
+	}
+	
+	def synchronized listPricesByProductId(String barcode) {
+		def criteria = Price.createCriteria()
+		List<BigDecimal> result = criteria.list() {
+			eq("product", new Product(barcode: barcode))
+			projections {
+				property("price")
+			}
+		}
+		return result;
 	}
 	
 	def synchronized getAllStrategiesNameList() {
@@ -63,7 +85,25 @@ class ProductService {
 	
 	def synchronized getGeneralPriceMap(Product productInstance) {
 		if(productInstance==null)return null;
-		return priceService.getGeneralPrices(productInstance)
+		return getGeneralPrices(productInstance)
+	}
+	
+	def synchronized getGeneralPrices(Product p) {
+		if(p==null)return null;
+		def priceMap = [:]
+		def criteria = Price.createCriteria()
+		List<Product> result = criteria.list(){
+			eq("product", p)
+			projections {
+				avg("price")
+				max("price")
+				min("price")
+			}
+		}
+		priceMap.put("Average", result[0][0])
+		priceMap.put("Max", result[0][1])
+		priceMap.put("Min", result[0][2])
+		return priceMap
 	}
 	
 	def synchronized getStrategyNameList(Product productInstance) {
@@ -87,7 +127,7 @@ class ProductService {
 	def getStrategyHint(String packageName, String className) {
 		String fullPath = packageName+".impl."+className;
 		PricingStategy ref = (PricingStategy) Class.forName(fullPath).newInstance();
-		return ref.hint;
+		return ref.HINT;
 	}
 	
 	def synchronized getAllStrategiesDefined() {
@@ -130,8 +170,21 @@ class ProductService {
 	def saveListOfPrices(List<String> priceList, Product productInstance) {
 		for(String tempPrice:priceList) {
 			Price price = new Price(price: tempPrice, product: productInstance)
-			priceService.savePrice(price)
+			price.save()
 		}
+	}
+	
+	@Transactional (readOnly=true)
+	Product findProduct(String barCode){
+		Product product
+		if(null != barCode && !barCode.isEmpty()){
+			product = Product.findByBarcode(barCode)
+		}
+		return product
+	}
+	
+	def synchronized deletePriceByBarcode(String barcode) {
+		Price.executeUpdate("delete Price where product_id = '"+barcode+"'")
 	}
 	
 	

@@ -15,7 +15,7 @@ class PriceController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond priceService.listPrices(params), model:[priceInstanceCount: Price.count()]
+        respond Price.list(params), model:[priceInstanceCount: Price.count()]
     }
 	
 	def search(Integer max) {
@@ -47,37 +47,32 @@ class PriceController {
 	
 	def addPrices(Product productInstance) {
 		productInstance = Product.get(params.barcode)
-		println "priceController::: addPrices..........."+productInstance
 		respond productInstance
 	}
 	
-    @Transactional(readOnly = false)
-    def save(Price p) {
-		Product product = params.product
-		String barcode = (product!=null)?product.barcode:""
-		BigDecimal price = p.getPrice()
-		Product pro = Product.get(barcode)
-		Price priceInstance = new Price(price: price, product: pro)
-        if (priceInstance == null) {
-            notFound()
-            return
-        }
+	@Transactional
+	def save(Price priceInstance) {
+		priceInstance.setProduct(Product.get(priceInstance.getProduct().getBarcode()))
+		if (priceInstance == null) {
+			notFound()
+			return
+		}
 
-        if (priceInstance.hasErrors()) {
-            respond priceInstance.errors, view:'create'
-            return
-        }
-		priceInstance.save(flush: true, failOnError: true)
+		if (priceInstance.hasErrors()) {
+			respond priceInstance.errors, view:'create'
+			return
+		}
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'price.label', default: 'Price'), priceInstance.id])
-                //redirect priceInstance
-				redirect view: "show", priceInstance: priceInstance
-            }
-            '*' { respond priceInstance, [status: CREATED] }
-        }
-    }
+		priceInstance.save flush:true
+
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.created.message', args: [message(code: 'price.label', default: 'Price'), priceInstance.id])
+				redirect priceInstance
+			}
+			'*' { respond priceInstance, [status: CREATED] }
+		}
+	}
     def edit(Price priceInstance) {
         respond priceInstance
     }
@@ -112,7 +107,7 @@ class PriceController {
             return
         }
 
-        priceService.deletePrice(priceInstance)
+        priceInstance.delete()
 
         request.withFormat {
             form multipartForm {

@@ -11,9 +11,9 @@ class ProductControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
-		params["barcode"] = "test555asfl33223"
-		params["productName"] = "test product name"
-		params["description"] = "test pro description"
+		params["barcode"] = "NOKIA6ANDROID"
+		params["productName"] = "NOKIA6"
+		params["description"] = "Android Phone"
 		
     }
 	
@@ -21,7 +21,7 @@ class ProductControllerSpec extends Specification {
 		given:
 			ProductService productService = Mock()
 			controller.productService = productService
-			Product productInstance = new Product("barcode": "test33434", "productName": "test pro", "description": "test desc")
+			Product productInstance = new Product("barcode": "NOKIA6ANDROID", "productName": "NOKIA6", "description": "Android Phone")
 			
         when:"The index action is executed"
             controller.index()
@@ -53,7 +53,7 @@ class ProductControllerSpec extends Specification {
             request.contentType = FORM_CONTENT_TYPE
             request.method = 'POST'
 			populateValidParams(params)
-            def product1 = new Product("barcode": "123qwe", "productName": "test pro", "description": "test desc")
+            def product1 = new Product("barcode": "NOKIA6ANDROID", "productName": "Nokia 6", "description": "Android Phone")
 			controller.request.method = "POST"
 			request.format = 'form'
 			
@@ -90,7 +90,8 @@ class ProductControllerSpec extends Specification {
 		given:
 			ProductService productService = Mock()
 			controller.productService = productService
-			Product p = new Product("barcode": "123qwe", "productName": "test pro", "description": "test desc")
+			Product p = new Product("barcode": "NOKIA6ANDROID", "productName": "Nokia 6", 
+				"description": "Android Phone")
 			ProductService ps = Mock()
 			ps.saveProduct(p)
 
@@ -106,7 +107,6 @@ class ProductControllerSpec extends Specification {
             controller.edit(p)
 
         then:"A model is populated containing the domain instance"
-			println ":::::::::::::::"+model.productInstance
             model.productInstance == null
     }
 
@@ -114,8 +114,8 @@ class ProductControllerSpec extends Specification {
 		given:
 			ProductService productService = Mock()
 			controller.productService = productService
-			Product product1 = new Product("barcode": "123qwe", "productName": "test pro", 
-					"description": "test desc")
+			Product product1 = new Product("barcode": "NOKIA6ANDROID", "productName": "Nokia 6", 
+					"description": "Android Phone")
 		
         when:"Update is called for a domain instance that doesn't exist"
             request.contentType = FORM_CONTENT_TYPE

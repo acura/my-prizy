@@ -9,7 +9,7 @@ import com.sarathi.strategy.PricingStategy;
 
 public class MeanPrice implements PricingStategy {
 
-	public String hint="Mean Price. This price is calculated by taking all the prices of this product, "
+	public static final String HINT="Mean Price. This price is calculated by taking all the prices of this product, "
 			+ "then doing an average with the all and adding 20% to it.";
 	
 	@Override

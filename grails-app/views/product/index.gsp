@@ -12,9 +12,9 @@
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-				<li style="margin-left: 150px; padding: 5px;" >
-					<g:message code="sfsdf" default="Search By Barcode : " /></li>
-				<li><input type="text" id="searchText" name="searchText" value="${searchText}" placeholder="barcode" /></li>
+				<li style="float: right;" >
+					<g:message code="sfsdf" default="Search By Barcode : " />
+				<input type="text" id="searchText" name="searchText" value="${searchText}" placeholder="barcode" /></li>
 				<li>
 				</li>
 			</ul>

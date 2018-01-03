@@ -9,7 +9,7 @@ import com.sarathi.strategy.PricingStategy;
 
 public class IdealPrice implements PricingStategy {
 
-	public String hint="Ideal Price. This price is calculated by taking all the prices of this product, "
+	public static final String HINT="Ideal Price. This price is calculated by taking all the prices of this product, "
 			+ "removing the 2 highest and 2 lowest, then doing an average with the rest and adding 20% to it.";
 	
 	@Override
@@ -17,7 +17,6 @@ public class IdealPrice implements PricingStategy {
 		Collections.sort(list);
 		if(list.size() <4) {
 			return new BigDecimal(-1);
-		} else {
 		}
 		
 		BigDecimal average = calculateAverage(list.subList(2, list.size()-2));

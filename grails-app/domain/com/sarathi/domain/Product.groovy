@@ -14,7 +14,7 @@ class Product {
 
 	static constraints = {
 		productName blank: false, size: 3..50
-		description size: 0..50, nullable: true
+		description size: 0..50, nullable: false, blank: false
 		barcode blank: false, size: 3..50,
 			matches: '^[a-zA-Z0-9]{4,50}$'
 

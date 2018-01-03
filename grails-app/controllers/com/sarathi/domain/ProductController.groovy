@@ -13,9 +13,9 @@ class ProductController {
 	def productService
 	def mapTemp = [:]
 	def preSearchText
-	def priceService
 
     def index(Integer max) {
+		log.info("ProductController:: index():::::::::::::::::::::::")
         params.max = Math.min(max ?: 10, 100)
 		int n = Product.count() 
 		respond productService.listProducts(params), model:[productInstanceCount: Product.count()]
@@ -51,7 +51,6 @@ class ProductController {
 		String strategy = params.strategy
 		strategy = strategy.replaceAll(" ", "")
 		if(strategy.equalsIgnoreCase("SelectStrategy")) {
-			println "select strategy selected::::::::::::::::::::::::"
 			render(template:'strategy', model:[price:new BigDecimal("0"), strategyHint: "Select Price Strategy!"])
 		} else {
 			String packageName = PricingStategy.class.getPackage()
@@ -70,7 +69,7 @@ class ProductController {
 
     @Transactional
     def save(Product productInstance) {
-		println "save():::::"+params
+		
         if (productInstance == null) {
             notFound()
             return
@@ -100,7 +99,6 @@ class ProductController {
 			
 			productService.saveListOfPrices(tempPriceList, productInstance)
 		} catch(org.springframework.dao.DuplicateKeyException e) {
-			println "exception block==========================="
 			flash.message = message(code: 'default.unique.product.message', args: [message(code: 'product.label', default: 'Product'), productInstance])
 			respond flash.message, view:'create', model:[productInstance:productInstance]
 			return
@@ -126,7 +124,6 @@ class ProductController {
 	
 	def addPrices(Product productInstance) {
 		productInstance = Product.get(params.barcode)
-		println "productController::: addPrices..........."+productInstance
 		redirect(controller: "price", action: "addPrices", params: [barcode: params.barcode])
 	}
 	@Transactional(readOnly=false)
@@ -146,20 +143,18 @@ class ProductController {
 	
 	@Transactional
 	def deleteAllPrices() {
-		println "deleteAllPrices======"+params
 		String barcode = params.barcode
 		Product productInstance = Product.get(barcode)
-		priceService.deletePriceByBarcode(barcode)
+		productService.deletePriceByBarcode(barcode)
 		
 		def priceMap = productService.getGeneralPriceMap(productInstance)
 		def strategyNameList = productService.getStrategyNameList(productInstance)
 		
 		render(view:'show',model:[productInstance:productInstance, priceMap:priceMap, strategyNameList:strategyNameList])
 	}
-
+	
     @Transactional(readOnly=false)
     def update(Product productInstance) {
-		
 		productInstance = Product.get(params.barcode)
 		
         if (productInstance == null) {
@@ -174,16 +169,18 @@ class ProductController {
             respond productInstance.errors, view:'edit'
             return
         }
-		//productService.updateProduct(productInstance)
+		def priceMap = productService.getGeneralPriceMap(productInstance)
+		def strategyNameList = productService.getStrategyNameList(productInstance)
      	productInstance.save(flush: true, failOnError: true)
-
+		 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'Product.label', default: 'Product'), productInstance.barcode])
-                //redirect productInstance
-				redirect view:"show", productInstance: productInstance
+				render(view:'show',model:[productInstance:productInstance, priceMap:priceMap, strategyNameList:strategyNameList])
+				//redirect view:"show", productInstance: productInstance
             }
-            '*'{ respond productInstance, [status: OK] }
+			render(view:'show',model:[productInstance:productInstance, priceMap:priceMap, strategyNameList:strategyNameList])
+            //'*'{ respond productInstance, [status: OK] }
         }
     }
 
