@@ -10,22 +10,26 @@ import spock.lang.*
 @Mock([Price, Product])
 class PriceControllerSpec extends Specification {
 
+	Product testProduct
+	
     def populateValidParams(params) {
         assert params != null
-        params["price"] = new BigDecimal(555)
 		
     }
+	
+	def setup() {
+		testProduct = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6",
+			description: "Android Phone")
+	}
 	
     void "Test the index action returns the correct model"() {
 		given:
 			PriceService priceService = Mock()
 			controller.priceService = priceService
-			Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6", 
-				description: "Android Phone")
-			product.save()
+			testProduct.save()
 			Price price
 			for(int i=11;i<=20;i++) {
-				price = new Price(price: i, product: product)
+				price = new Price(price: i, product: testProduct)
 				price.save()
 			}
 
@@ -53,17 +57,15 @@ class PriceControllerSpec extends Specification {
 		given:
 			PriceService priceService = Mock()
 			controller.priceService = priceService
-			Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6", 
-				description: "Android Phone")
-			product.save()
-			Price price
+			testProduct.save()
+			Price testPrice
 		
         when:"The save action is executed with an invalid instance"
             request.contentType = FORM_CONTENT_TYPE
             request.method = 'POST'
-			price = new Price(product: product)
-            price.validate()
-            controller.save(price)
+			testPrice = new Price(product: testProduct)
+            testPrice.validate()
+            controller.save(testPrice)
 
         then:"The create view is rendered again with the correct model"
             model.priceInstance!= null
@@ -71,13 +73,12 @@ class PriceControllerSpec extends Specification {
 
         when:"The save action is executed with a valid instance"
             response.reset()
-            populateValidParams(params)
-            price = new Price(price: new BigDecimal("10"), product: product)
+            testPrice = new Price(price: new BigDecimal("10"), product: testProduct)
 			
 			request.method = 'POST'
 			request.format = 'form'
 			
-            controller.save(price)
+            controller.save(testPrice)
 
         then:"A redirect is issued to the show action"
             response.redirectedUrl == '/price/show/1'
@@ -89,6 +90,7 @@ class PriceControllerSpec extends Specification {
 		given:
 			PriceService priceService = Mock()
 			controller.priceService = priceService
+			Price testPrice
 
 		
 		when:"The show action is executed with a null domain"
@@ -98,12 +100,11 @@ class PriceControllerSpec extends Specification {
             response.status == 404
 
         when:"A domain instance is passed to the show action"
-            populateValidParams(params)
-            def price = new Price(params)
-            controller.show(price)
+            testPrice = new Price(price: new BigDecimal("10.2"), product: testProduct)
+            controller.show(testPrice)
 
         then:"A model is populated containing the domain instance"
-            model.priceInstance == price
+            model.priceInstance == testPrice
     }
 
     void "Test that the edit action returns the correct model"() {
@@ -119,22 +120,19 @@ class PriceControllerSpec extends Specification {
             response.status == 404
 
         when:"A domain instance is passed to the edit action"
-            populateValidParams(params)
-            def price = new Price(params)
-            controller.edit(price)
+            Price testPrice = new Price(price: new BigDecimal("10"), product: testProduct)
+            controller.edit(testPrice)
 
         then:"A model is populated containing the domain instance"
-            model.priceInstance == price
+            model.priceInstance == testPrice
     }
 
     void "Test the update action performs an update on a valid domain instance"() {
 		given:
 			PriceService priceService = Mock()
 			controller.priceService = priceService
-			Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6", 
-				description: "Android Phone")
-			product.save()
-			Price price
+			testProduct.save()
+			Price testPrice
 
 		
 		when:"Update is called for a domain instance that doesn't exist"
@@ -148,21 +146,21 @@ class PriceControllerSpec extends Specification {
 
         when:"An invalid domain instance is passed to the update action"
             response.reset()
-            price = new Price()
-            price.validate()
-            controller.update(price)
+            testPrice = new Price()
+            testPrice.validate()
+            controller.update(testPrice)
 
         then:"The edit view is rendered again with the invalid instance"
             view == 'edit'
-            model.priceInstance == price
+            model.priceInstance == testPrice
 
         when:"A valid domain instance is passed to the update action"
             response.reset()
             populateValidParams(params)
-            price = new Price(price:new BigDecimal("123"), product: product)
-			price.save(flush: true)
-			price.setPrice(new BigDecimal(555))
-            controller.update(price)
+            testPrice = new Price(price:new BigDecimal("123"), product: testProduct)
+			testPrice.save(flush: true)
+			testPrice.setPrice(new BigDecimal(555))
+            controller.update(testPrice)
 
         then:"A redirect is issues to the show action"
             response.redirectedUrl == "/price/show/1"
@@ -173,10 +171,8 @@ class PriceControllerSpec extends Specification {
 		given:
 			PriceService priceService = Mock()
 			controller.priceService = priceService
-			Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6", 
-				description: "Android Phone")
-			product.save()
-			Price price
+			testProduct.save()
+			Price testPrice
 
 		when:"The delete action is called for a null instance"
             request.contentType = FORM_CONTENT_TYPE
@@ -190,14 +186,14 @@ class PriceControllerSpec extends Specification {
         when:"A domain instance is created"
             response.reset()
             populateValidParams(params)
-            price = new Price(price:123,product: product)
-			price.save(flush: true)
+            testPrice = new Price(price:123,product: testProduct)
+			testPrice.save(flush: true)
 
         then:"It exists"
             Price.count() == 1
 
         when:"The domain instance is passed to the delete action"
-            controller.delete(price)
+            controller.delete(testPrice)
 
         then:"The instance is deleted"
             Price.count() == 0

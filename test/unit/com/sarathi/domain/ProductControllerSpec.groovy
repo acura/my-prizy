@@ -9,19 +9,21 @@ import spock.lang.*
 @Mock(Product)
 class ProductControllerSpec extends Specification {
 
+	Product testProduct
     def populateValidParams(params) {
         assert params != null
-		params["barcode"] = "NOKIA6ANDROID"
-		params["productName"] = "NOKIA6"
-		params["description"] = "Android Phone"
 		
     }
+	
+	def setup() {
+		testProduct = new Product("barcode": "NOKIA6ANDROID", "productName": "Nokia 6",
+			"description": "Android Phone")
+	}
 	
     void "Test the index action returns the correct model"() {
 		given:
 			ProductService productService = Mock()
 			controller.productService = productService
-			Product productInstance = new Product("barcode": "NOKIA6ANDROID", "productName": "NOKIA6", "description": "Android Phone")
 			
         when:"The index action is executed"
             controller.index()
@@ -52,12 +54,10 @@ class ProductControllerSpec extends Specification {
         when:"The save action is executed with an invalid instance"
             request.contentType = FORM_CONTENT_TYPE
             request.method = 'POST'
-			populateValidParams(params)
-            def product1 = new Product("barcode": "NOKIA6ANDROID", "productName": "Nokia 6", "description": "Android Phone")
 			controller.request.method = "POST"
 			request.format = 'form'
 			
-            controller.save(product1)
+            controller.save(testProduct)
 
         then:"The create view is rendered again with the correct model"
             model.productInstance!= null
@@ -78,22 +78,18 @@ class ProductControllerSpec extends Specification {
             response.status == 200
 
         when:"A domain instance is passed to the show action"
-            populateValidParams(params)
-            def product = new Product(params)
-            controller.show(product)
+            controller.show(testProduct)
 
         then:"A model is populated containing the domain instance"
-            model.productInstance == product
+            model.productInstance == testProduct
     }
 
     void "Test that the edit action returns the correct model"() {
 		given:
 			ProductService productService = Mock()
 			controller.productService = productService
-			Product p = new Product("barcode": "NOKIA6ANDROID", "productName": "Nokia 6", 
-				"description": "Android Phone")
 			ProductService ps = Mock()
-			ps.saveProduct(p)
+			ps.saveProduct(testProduct)
 
 		
         when:"The edit action is executed with a null domain"
@@ -103,8 +99,7 @@ class ProductControllerSpec extends Specification {
             response.status == 404
 
         when:"A domain instance is passed to the edit action"
-            populateValidParams(params)
-            controller.edit(p)
+            controller.edit(testProduct)
 
         then:"A model is populated containing the domain instance"
             model.productInstance == null
@@ -114,13 +109,11 @@ class ProductControllerSpec extends Specification {
 		given:
 			ProductService productService = Mock()
 			controller.productService = productService
-			Product product1 = new Product("barcode": "NOKIA6ANDROID", "productName": "Nokia 6", 
-					"description": "Android Phone")
 		
         when:"Update is called for a domain instance that doesn't exist"
             request.contentType = FORM_CONTENT_TYPE
             request.method = 'PUT'
-            controller.update(product1)
+            controller.update(testProduct)
 
         then:"A 404 error is returned"
             response.redirectedUrl == '/product/index'
@@ -139,9 +132,7 @@ class ProductControllerSpec extends Specification {
 
         when:"A valid domain instance is passed to the update action"
             response.reset()
-            populateValidParams(params)
-            product1 = new Product(params).save(flush: true)
-            controller.update(product1)
+            controller.update(testProduct)
 
         then:"A redirect is issues to the show action"
             response.redirectedUrl == "/product/index"
@@ -165,14 +156,13 @@ class ProductControllerSpec extends Specification {
 
         when:"A domain instance is created"
             response.reset()
-            populateValidParams(params)
-            def product = new Product(params).save(flush: true)
+            testProduct.save(flush: true)
 
         then:"It exists"
             Product.count() == 1
 
         when:"The domain instance is passed to the delete action"
-            controller.delete(product)
+            controller.delete(testProduct)
 
         then:"The instance is deleted"
             Product.count() == 1

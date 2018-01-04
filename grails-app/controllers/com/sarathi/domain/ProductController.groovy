@@ -126,7 +126,6 @@ class ProductController {
 	
 	def addPrices(Product productInstance) {
 		productInstance = Product.get(params.barcode)
-		println ":::::::::::::::::::::::::::"+productInstance
 		//redirect(controller: "price", action: "addPrices", params: [barcode: params.barcode])
 		respond productInstance
 	}
@@ -169,7 +168,6 @@ class ProductController {
     @Transactional(readOnly=false)
     def update(Product productInstance) {
 		productInstance = Product.get(params.barcode)
-		
         if (productInstance == null) {
             notFound()
             return

@@ -8,7 +8,7 @@ class PriceService {
     def serviceMethod() {
     }
 	
-	def synchronized searchByProductBarcode(String searchText, Integer max, Integer offset){
+	def searchByProductBarcode(String searchText, Integer max, Integer offset){
 		if(offset==null) {
 			offset=0
 		}
