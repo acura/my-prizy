@@ -27,7 +27,7 @@ class PriceController {
 		Integer offset = params.offset as Integer
 		offset==null?0:offset
 		ArrayList<Price> priceInstanceList = priceService.searchByProductBarcode(preSearchText, max, offset);
-		def total = priceService.getPriceCountForSearch(preSearchText, max, offset)
+		def total = priceService.getPriceCountForSearch(preSearchText)
 		if(offset.equals(0) && searchText != null) {
 			render(view: "index",  model: [priceInstanceList:priceInstanceList, searchText: preSearchText, priceInstanceCount:total])
 		} else if(offset>0) {
@@ -44,11 +44,6 @@ class PriceController {
     def create() {
         respond new Price(params)
     }
-	
-	def addPrices(Product productInstance) {
-		productInstance = Product.get(params.barcode)
-		respond productInstance
-	}
 	
 	@Transactional
 	def save(Price priceInstance) {

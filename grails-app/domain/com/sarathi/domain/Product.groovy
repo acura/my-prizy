@@ -1,8 +1,5 @@
 package com.sarathi.domain
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.persistence.CascadeType
 
 class Product {
 
@@ -32,6 +29,6 @@ class Product {
 	
 	@Override
 	public String toString() {
-		return productName+" ( "+barcode+" )"
+		return productName+" having barcode:"+barcode
 	}
 }

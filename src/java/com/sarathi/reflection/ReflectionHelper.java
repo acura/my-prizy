@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
+import jline.internal.Log;
+
 import com.sarathi.strategy.PricingStategy;
 
 public class ReflectionHelper {
@@ -36,7 +38,7 @@ public class ReflectionHelper {
                 }
             }
         } catch (ClassNotFoundException | IOException e) {
-           e.printStackTrace();
+          Log.error(e.getMessage());
         }
 
         return rVal;

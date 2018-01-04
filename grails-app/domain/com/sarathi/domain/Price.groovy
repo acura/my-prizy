@@ -1,7 +1,5 @@
 package com.sarathi.domain
 
-import java.text.NumberFormat;
-
 class Price {
 
 	BigDecimal price;

@@ -40,12 +40,12 @@
 			<ol class="property-list product">
 			
 				<g:if test="${productInstance?.productName}">
-				<li class="fieldcontain">
-					<span id="productName-label" class="property-label"><g:message code="product.productName.label" default="Product Name" /></span>
-					
-					<span class="property-value" aria-labelledby="productName-label"><g:fieldValue bean="${productInstance}" field="productName"/></span>
-					
-				</li>
+					<li class="fieldcontain">
+						<span id="productName-label" class="property-label"><g:message code="product.productName.label" default="Product Name" /></span>
+						
+						<span class="property-value" aria-labelledby="productName-label"><g:fieldValue bean="${productInstance}" field="productName"/></span>
+						
+					</li>
 				</g:if>
 			
 				<g:if test="${productInstance?.description}">

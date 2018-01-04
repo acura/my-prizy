@@ -9,9 +9,6 @@ import com.sarathi.strategy.PricingStategy
 @Transactional
 class ProductService {
 
-    def serviceMethod() {
-    }
-	
 	def synchronized listProducts(params) {
 		return Product.list(params)
 	}
@@ -77,7 +74,6 @@ class ProductService {
 		List<String> strategies = new ArrayList<>();
 		for(Class<?> c:list) {
 			String str = c.getName();
-			PricingStategy ref = (PricingStategy) Class.forName(str).newInstance();
 			strategies.add(str.substring(str.lastIndexOf(".")+1))
 		}
 		return strategies
@@ -106,7 +102,7 @@ class ProductService {
 		return priceMap
 	}
 	
-	def synchronized getStrategyNameList(Product productInstance) {
+	def synchronized getStrategyNameList() {
 		def list = getAllStrategiesDefined()
 		def strategyNameList = []
 		
