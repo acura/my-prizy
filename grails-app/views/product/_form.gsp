@@ -23,6 +23,6 @@
 		<g:message code="product.barcode.label" default="Barcode" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField readonly="true" name="barcode" maxlength="50" required="" value="${productInstance?.barcode}"/>
+	<g:textField name="barcode" maxlength="50" required="" value="${productInstance?.barcode}"/>
 
 </div>
