@@ -6,10 +6,16 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(ProductController)
-@Mock(Product)
+@grails.test.mixin.Mock([Product,ProductService,Price,PriceService])
 class ProductControllerSpec extends Specification {
 
 	Product testProduct
+	
+	static doWithSpring = {
+		productService ProductService
+		priceService PriceService
+	}
+	
     def populateValidParams(params) {
         assert params != null
 		
@@ -169,4 +175,27 @@ class ProductControllerSpec extends Specification {
             response.redirectedUrl == '/product/index'
             flash.message != null
     }
+	
+	void "test search function"() {
+		given:
+			/*ProductService productService = Mock()
+			controller.productService = new ProductService()*/
+			params["searchText"] = "ANDROID"
+			params["offset"] = "0"
+			for(int i=1;i<=5;i++) {
+				testProduct.setBarcode("NOKIA6ANDROID"+i)
+				testProduct.save()
+			}
+			for(int i=1;i<=5;i++) {
+				testProduct.setBarcode("ONEPLUS5ANDROID"+i)
+				testProduct.save()
+			}
+			
+		when:"search function is called by searchText as 'ANDROID' it should give result of 10"
+			def res = controller.search(10)
+			
+		then:
+			Product.count() == 10
+            view == '/product/index'
+	}
 }

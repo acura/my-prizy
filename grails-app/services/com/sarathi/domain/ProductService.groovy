@@ -34,9 +34,7 @@ class ProductService {
 	
 	def updateProduct(Product product) {
 		synchronized (this) {
-			Boolean res = Product.executeUpdate("UPDATE Product p SET p.description="
-				+product.getDescription()+", p.productName="+product.getProductName()
-				+" WHERE barcode='"+product.getBarcode()+"'")
+			Boolean res = product.save()
 			return res
 		}
 	}
@@ -47,7 +45,7 @@ class ProductService {
 		}
 	}
 	
-	def getPrice(Product product, PricingStategy ref) {
+	def getPriceByStrategyReference(Product product, PricingStategy ref) {
 		synchronized (this) {
 			List<BigDecimal> prices = listPricesByProduct(product)
 			return ref.calculate(prices)
@@ -64,13 +62,6 @@ class ProductService {
 				}
 			}
 			return result;
-		}
-	}
-	
-	def getPriceByProductId(int productId, PricingStategy ref) {
-		synchronized (this) {
-			List<Price> prices = listPricesByProductId(productId)
-			return ref.calculate(prices)
 		}
 	}
 	
@@ -91,7 +82,7 @@ class ProductService {
 		synchronized (this) {
 			List<Class<?>> list = ReflectionHelper.findClassesImpmenenting()
 			List<String> strategies = new ArrayList<>();
-			for(Class<?> c:list) {
+			list.forEach {c -> 
 				String str = c.getName();
 				strategies.add(str.substring(str.lastIndexOf(".")+1))
 			}
@@ -130,8 +121,7 @@ class ProductService {
 		synchronized (this) {
 			def list = getAllStrategiesDefined()
 			def strategyNameList = []
-			
-			for(c in list)  {
+			list.forEach{c -> 
 				String str = c.getName();
 				String name = str.substring(str.lastIndexOf(".")+1)
 				strategyNameList.add(getWordSeparated(name))
@@ -203,7 +193,7 @@ class ProductService {
 	
 	def saveListOfPrices(List<String> priceList, Product productInstance) {
 		synchronized (this) {
-			for(String tempPrice:priceList) {
+			priceList.forEach {tempPrice -> 
 				Price price = new Price(price: tempPrice, product: productInstance)
 				price.save()
 			}
@@ -223,7 +213,7 @@ class ProductService {
 	
 	def deletePriceByBarcode(String barcode) {
 		synchronized (this) {
-			Price.executeUpdate("delete Price where product_id = '"+barcode+"'")
+			Price.where {product== Product.findByBarcode(barcode)}.deleteAll()
 		}
 	}
 	

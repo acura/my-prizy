@@ -15,7 +15,7 @@ public class IdealPrice implements PricingStategy {
 	@Override
 	public synchronized BigDecimal calculate(List<BigDecimal> list) {
 		Collections.sort(list);
-		if(list.size() <4) {
+		if(list.size() <=4) {
 			return new BigDecimal(-1);
 		}
 		

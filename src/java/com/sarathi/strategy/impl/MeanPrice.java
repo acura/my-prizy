@@ -16,7 +16,7 @@ public class MeanPrice implements PricingStategy {
 	public synchronized BigDecimal calculate(List<BigDecimal> list) {
 		
 		Collections.sort(list);
-		if(list.size() <4) {
+		if(list.size() <=4) {
 			return new BigDecimal(-1);
 		} else {
 			BigDecimal average = calculateAverage(list);

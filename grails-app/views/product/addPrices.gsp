@@ -66,7 +66,7 @@
 							<g:message code="price.price.label" default="Prices List" />
 							<span class="required-indicator">*</span>
 						</label>
-						<g:textArea size="50px" type="number" pattern="[0-9.,]+" required="true" class="form-control" name="priceList" value=""/>
+						<g:textField size="50px" type="number" pattern="[0-9.,]+" required="true" class="form-control" name="priceList" value=""/>
 						<label><g:message code="price.price.label" default="Enter comma separated list of prices." /></label>
 					</div>
 				</fieldset>

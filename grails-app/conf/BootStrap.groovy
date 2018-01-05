@@ -10,7 +10,7 @@ class BootStrap {
 	Price price;
 	
     def init = { servletContext ->
-		if (Environment.current != Environment.TEST) {
+		/*if (Environment.current != Environment.TEST) {
 			if(Product.count() == 0) {
 				
 				ClassLoader classLoader = getClass().getClassLoader();
@@ -29,7 +29,7 @@ class BootStrap {
 					}
 				}
 			}
-		}
+		}*/
 		
 	}
     def destroy = {

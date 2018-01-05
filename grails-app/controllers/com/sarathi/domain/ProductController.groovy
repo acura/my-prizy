@@ -20,9 +20,7 @@ class ProductController {
 	
 	def search(Integer max) {
 		String searchText = params.searchText
-		if(searchText != null) {
-			preSearchText = searchText
-		}
+		preSearchText = searchText!=null?searchText:preSearchText
 		searchText = searchText==null?"":searchText
 		Integer offset = params.offset as Integer
 		offset==null?0:offset
@@ -49,6 +47,7 @@ class ProductController {
     }
 	
 	def calculatePrice() {
+		Product productInstance = productService.findProduct(params.barcode)
 		String strategy = params.strategy
 		strategy = strategy.replaceAll(" ", "")
 		if(strategy.equalsIgnoreCase("SelectStrategy")) {
@@ -56,13 +55,10 @@ class ProductController {
 		} else {
 			String packageName = PricingStategy.class.getPackage()
 			packageName = packageName.split(" ")[1]
-			def barcode = params.barcode
-			String strategyHint = productService.getStrategyHint(packageName, strategy);
-			def price = productService.getPrice(Product.get(barcode), 
+			def price = productService.getPriceByStrategyReference(productInstance,
 					productService.getReference(packageName, strategy))
-			
-			render(template:'strategy', model:[price:price==new BigDecimal("-1")?"Less than 4 prices...":price, 
-					strategyHint: strategyHint])
+			String strategyHint = price==-1 ? "Less than 4 prices" : productService.getStrategyHint(packageName, strategy);
+			render(template:price==-1?'LessNumberOfPricesMessage':'strategy', model:[price:price, strategyHint: strategyHint])
 		}
 	}
 	
@@ -118,18 +114,18 @@ class ProductController {
     }
 
     def edit(Product productInstance) {
-		productInstance = Product.get(params.barcode)
+		productInstance = productService.findProduct(params.barcode)
         respond productInstance
     }
 	
 	def addPrices(Product productInstance) {
-		productInstance = Product.get(params.barcode)
+		productInstance = productService.findProduct(params.barcode)
 		//redirect(controller: "price", action: "addPrices", params: [barcode: params.barcode])
 		respond productInstance
 	}
 	@Transactional(readOnly=false)
 	def savePrices() {
-		Product productInstance = Product.get(params.barcode)
+		Product productInstance = productService.findProduct(params.barcode)
 		String priceList = params.priceList
 		priceList.replace(" ", "")
 		List<String> tempPriceList = Arrays.asList(priceList.split(","));
@@ -153,7 +149,7 @@ class ProductController {
 	@Transactional
 	def deleteAllPrices() {
 		String barcode = params.barcode
-		Product productInstance = Product.get(barcode)
+		Product productInstance = productService.findProduct(barcode)
 		productService.deletePriceByBarcode(barcode)
 		
 		def priceMap = productService.getGeneralPriceMap(productInstance)
@@ -165,7 +161,7 @@ class ProductController {
 	
     @Transactional(readOnly=false)
     def update(Product productInstance) {
-		productInstance = Product.get(params.barcode)
+		productInstance = productService.findProduct(params.barcode)
         if (productInstance == null) {
             notFound()
             return
@@ -198,7 +194,7 @@ class ProductController {
 
     @Transactional
     def delete(Product productInstance) {
-		productInstance = Product.get(params.barcode)
+		productInstance = productService.findProduct(params.barcode)
         if (productInstance == null) {
             notFound()
             return

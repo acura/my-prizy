@@ -1,5 +1,8 @@
 package com.sarathi.domain
-import grails.test.mixin.*
+
+import spock.lang.Specification
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 import com.sarathi.strategy.impl.IdealPrice
@@ -51,27 +54,55 @@ class ProductServiceSpec extends Specification {
 			countReturn == productCount-1
 	}
 	
-	void "test getPrice method"() {
+	void "test getPriceByStrategyReference method"() {
 		given:
 			Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6", 
 				description: "Android Phone")
 			def price
-			BigDecimal res
+			List<BigDecimal> prices = new ArrayList<>()
+			def ip
+			def mp
 			service.saveProduct(product)
-			for(int i=11;i<=20;i++) {
-				price = new Price(price: i, product: product)
+			
+			
+		when:"test Ideal and Mean Prices for valid prices "
+			prices.add(new BigDecimal("12")); prices.add(new BigDecimal("25"));
+			prices.add(new BigDecimal("37")); prices.add(new BigDecimal("59"));
+			prices.add(new BigDecimal("69")); prices.add(new BigDecimal("79"));
+			prices.add(new BigDecimal("85"));
+			prices.forEach {p ->
+				price = new Price(price: p, product: product)
 				service.savePrice(price)
 			}
-			
-		when:
-			res = service.getPrice(product, new IdealPrice())
+			ip = service.getPriceByStrategyReference(product, new IdealPrice())
+			mp = service.getPriceByStrategyReference(product, new MeanPrice())
 		then:
-			res == 18.60
+			ip == 66.00
+			mp == 62.75
 			
-		when:
-			res = service.getPrice(product, new MeanPrice())
+		when:"test Ideal and Mean Prices for 0 prices"
+			prices.removeAll(prices)
+			service.deletePriceByBarcode(product.getBarcode())
+			ip = service.getPriceByStrategyReference(product, new IdealPrice())
+			mp = service.getPriceByStrategyReference(product, new MeanPrice())
 		then:
-			res == 18.60
+			ip == -1
+			mp == -1
+			
+			when:"test Ideal and Mean Prices for 4 prices"
+			prices.removeAll(prices)
+			service.deletePriceByBarcode(product.getBarcode())
+			prices.add(new BigDecimal("12")); prices.add(new BigDecimal("25"));
+			prices.add(new BigDecimal("37")); prices.add(new BigDecimal("59"));
+			prices.forEach {p ->
+				price = new Price(price: p, product: product)
+				service.savePrice(price)
+			}
+			ip = service.getPriceByStrategyReference(product, new IdealPrice())
+			mp = service.getPriceByStrategyReference(product, new MeanPrice())
+		then:
+			ip == -1
+			mp == -1
 			
 	}
 	
