@@ -4,9 +4,6 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = false)
 class PriceService {
-
-    def serviceMethod() {
-    }
 	
 	def searchByProductBarcode(String searchText, Integer max, Integer offset){
 		if(offset==null) {

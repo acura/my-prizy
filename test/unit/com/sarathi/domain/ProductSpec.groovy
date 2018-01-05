@@ -15,9 +15,6 @@ class ProductSpec extends Specification {
 		product = new Product(barcode : 'NOKIA6ANDROID', productName: 'Nokia 6', description: 'Android Phone' );
 	}
 
-	def cleanup() {
-	}
-
 	void "test for barcode"() {
 		when: "when barcode is blank"
 			def testProduct = new Product(barcode : '', productName: 'Nokia 6', description: 'Android Phone' );

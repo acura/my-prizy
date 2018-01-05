@@ -1,11 +1,9 @@
 package com.sarathi.domain
 
 import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
 
 import com.sarathi.strategy.PricingStategy
-import com.sun.glass.ui.View;
-
-import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class ProductController {

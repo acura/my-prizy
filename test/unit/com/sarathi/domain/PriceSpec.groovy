@@ -16,9 +16,6 @@ class PriceSpec extends Specification {
 		price = new Price(price : new BigDecimal("100.2"));
 	}
 
-	def cleanup() {
-	}
-
 	void "test for price"() {
 		when: "price is blank"
 		Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6",

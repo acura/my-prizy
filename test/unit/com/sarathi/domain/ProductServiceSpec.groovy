@@ -1,11 +1,7 @@
 package com.sarathi.domain
-import org.spockframework.mock.runtime.MockObject;
-
 import grails.test.mixin.*
-import groovy.mock.interceptor.MockFor;
 import spock.lang.Specification
 
-import com.sarathi.strategy.PricingStategy
 import com.sarathi.strategy.impl.IdealPrice
 import com.sarathi.strategy.impl.MeanPrice
 
@@ -28,7 +24,6 @@ class ProductServiceSpec extends Specification {
 	
 	void "test delete product method"() {
 		given:
-			def barcode = 'NOKIA6ANDROID'
 			def product
 			def productReturn
 			int productCount
@@ -61,7 +56,6 @@ class ProductServiceSpec extends Specification {
 			Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6", 
 				description: "Android Phone")
 			def price
-			IdealPrice idealPrice = Mock()
 			BigDecimal res
 			service.saveProduct(product)
 			for(int i=11;i<=20;i++) {
@@ -93,7 +87,6 @@ class ProductServiceSpec extends Specification {
 			Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6", 
 				description: "Android Phone")
 			def price
-			IdealPrice idealPrice = Mock()		
 			service.saveProduct(product)
 			for(int i=11;i<=20;i++) {
 				price = new Price(price: i, product: product)
@@ -114,7 +107,6 @@ class ProductServiceSpec extends Specification {
 			Product product = new Product(barcode: "NOKIA6ANDROID", productName: "Nokia 6", 
 				description: "Android Phone")
 			def price
-			IdealPrice idealPrice = Mock()
 			service.saveProduct(product)
 			for(int i=11;i<=20;i++) {
 				price = new Price(price: i, product: product)
