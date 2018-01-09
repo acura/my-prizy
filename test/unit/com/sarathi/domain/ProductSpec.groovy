@@ -31,7 +31,7 @@ class ProductSpec extends Specification {
 			testProduct = new Product( productName: 'Nokia 6',	description: 'Android Phone' );
 			mockForConstraintsTests(Product, [testProduct])
 			result = testProduct.validate()
-
+			
 		then:
 			testProduct.errors['barcode'] == 'nullable'
 			testProduct.errors.getFieldError().field== 'barcode'

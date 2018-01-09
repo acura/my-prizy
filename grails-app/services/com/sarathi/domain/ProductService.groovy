@@ -5,11 +5,14 @@ import grails.transaction.Transactional
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
 import com.sarathi.reflection.ReflectionHelper
 import com.sarathi.strategy.PricingStategy
+import groovy.util.logging.Slf4j
+
 
 @Transactional
 class ProductService {
 
 	def listProducts(params) {
+		log.info("listProduct::::::::::::::::::::::::::::::::::::::::")
 		synchronized (this) {
 			return Product.list(params)
 		}
@@ -99,7 +102,8 @@ class ProductService {
 	
 	def getGeneralPrices(Product p) {
 		synchronized (this) {
-			if(p==null)return null;
+			if(p==null)
+				return null;
 			def priceMap = [:]
 			def criteria = Price.createCriteria()
 			List<Product> result = criteria.list(){
@@ -160,7 +164,7 @@ class ProductService {
 			
 			def criteria = Product.createCriteria()
 			List<Product> result = criteria.list(max: max, offset: offset){
-				like('barcode', "%"+text.trim()+"%")
+				like('barcode', "%"+(text==null?"":text).trim()+"%")
 			}
 			return result
 		}
@@ -170,7 +174,7 @@ class ProductService {
 		synchronized (this) {
 			def criteria = Product.createCriteria()
 			List<Product> result = criteria.list(){
-				like('barcode', "%"+text.trim()+"%")
+				like('barcode', "%"+(text==null?"":text).trim()+"%")
 				projections {
 					count()
 				}

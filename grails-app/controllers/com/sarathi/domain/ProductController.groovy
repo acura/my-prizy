@@ -14,8 +14,10 @@ class ProductController {
 	def preSearchText
 
     def index(Integer max) {
+		log.info "Configuration data source:::::::::::::::::::::::::::::::::::::::"
         params.max = Math.min(max ?: 10, 100)
-		respond productService.listProducts(params), model:[productInstanceCount: Product.count()]
+		List<Product> list = productService.listProducts(params) 
+		respond list, model:[productInstanceCount: list.size()]
     }
 	
 	def search(Integer max) {
@@ -39,6 +41,16 @@ class ProductController {
 	}
 
     def show(Product productInstance) {
+		if (productInstance == null) {
+            notFound()
+            return
+        }
+
+        if (productInstance.hasErrors()) {
+            respond productInstance.errors, view:'list'
+            return
+        }
+		
 		def priceMap = productService.getGeneralPriceMap(productInstance)
 		def strategyNameList = productService.getStrategyNameList()
 		
@@ -47,7 +59,8 @@ class ProductController {
     }
 	
 	def calculatePrice() {
-		Product productInstance = productService.findProduct(params.barcode)
+		String barcode = params.barcode
+		Product productInstance = productService.findProduct(barcode)
 		String strategy = params.strategy
 		strategy = strategy.replaceAll(" ", "")
 		if(strategy.equalsIgnoreCase("SelectStrategy")) {
@@ -58,12 +71,12 @@ class ProductController {
 			def price = productService.getPriceByStrategyReference(productInstance,
 					productService.getReference(packageName, strategy))
 			String strategyHint = price==-1 ? "Less than 4 prices" : productService.getStrategyHint(packageName, strategy);
-			render(template:price==-1?'LessNumberOfPricesMessage':'strategy', model:[price:price, strategyHint: strategyHint])
+			render(template:price==-1?'LessNumberOfPricesMessage':'strategy', model:[calculatedPrice:price, strategyHint: strategyHint])
 		}
 	}
 	
     def create() {
-        respond new Product(params)
+		render(view: 'create', model : [productInstance: new Product(params)])
     }
 
     @Transactional
@@ -115,7 +128,11 @@ class ProductController {
 
     def edit(Product productInstance) {
 		productInstance = productService.findProduct(params.barcode)
-        respond productInstance
+		if(null == productInstance) {
+			notFound()
+			return
+		}
+        render(view: 'edit', model:[productInstance: productInstance])
     }
 	
 	def addPrices(Product productInstance) {
@@ -123,8 +140,8 @@ class ProductController {
 		//redirect(controller: "price", action: "addPrices", params: [barcode: params.barcode])
 		respond productInstance
 	}
-	@Transactional(readOnly=false)
 	def savePrices() {
+		println "ProductController::: savePrices():::::"+Product.count()
 		Product productInstance = productService.findProduct(params.barcode)
 		String priceList = params.priceList
 		priceList.replace(" ", "")
