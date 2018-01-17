@@ -8,7 +8,11 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${priceInstanceList}" status="i" var="priceInstance">
+				<g:if test="${priceInstanceList.size() == 0}" >
+					<tr><td><div class="alert alert-error" style="display: block">No Prices Found!</div></td></tr>
+				</g:if>
+				<g:else>
+					<g:each in="${priceInstanceList}" status="i" var="priceInstance">
 					<tr align="right" class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						<td>${fieldValue(bean: priceInstance, field: "product.barcode")}</td>
 						<td>${fieldValue(bean: priceInstance, field: "product.productName")}</td>
@@ -20,6 +24,7 @@
 						</td>
 					</tr>
 				</g:each>
+				</g:else>	
 				</tbody>
 			</table>
 			<div id="paginate" class="pagination" >

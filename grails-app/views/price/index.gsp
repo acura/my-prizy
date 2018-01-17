@@ -13,10 +13,9 @@
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-				<li style="margin-left: 150px; padding: 5px;" >
-					<g:message code="sfsdf" default="Search By Barcode : " /></li>
-				<li>
-					<input type="text" style="width: 100%;" id="searchText" name="searchText" value="${searchText}" placeholder="barcode" />
+				<li style="float: right;" >
+					<g:message code="sfsdf" default="Search By Barcode : " />
+					<input type="text" id="searchText" name="searchText" value="${searchText}" placeholder="barcode" />
 				</li>
 			</ul>
 		</div>
@@ -36,15 +35,20 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${priceInstanceList}" status="i" var="priceInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-						<td>${fieldValue(bean: priceInstance, field: "product.barcode")}</td>
-						<td>${fieldValue(bean: priceInstance, field: "product.productName")}</td>
-						<td style="text-align: right;" ><g:link action="show" id="${priceInstance.id}" style="font: bold;font-style: italic;quotes: inherit;font-family: cursive;" >
-								<g:formatNumber number="${priceInstance?.price}" type="currency" currencySymbol="\$" currencyCode="USD"  maxFractionDigits="2" />
-						</g:link></td>
-					</tr>
-				</g:each>
+				<g:if test="${priceInstanceList == null}" >
+						<tr><td><div class="alert alert-error" style="display: block">No Price Found!</div></td></tr>
+				</g:if>
+				<g:else>
+					<g:each in="${priceInstanceList}" status="i" var="priceInstance">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+							<td>${fieldValue(bean: priceInstance, field: "product.barcode")}</td>
+							<td>${fieldValue(bean: priceInstance, field: "product.productName")}</td>
+							<td style="text-align: right;" ><g:link action="show" id="${priceInstance.id}" style="font: bold;font-style: italic;quotes: inherit;font-family: cursive;" >
+									<g:formatNumber number="${priceInstance?.price}" type="currency" currencySymbol="\$" currencyCode="USD"  maxFractionDigits="2" />
+							</g:link></td>
+						</tr>
+					</g:each>
+				</g:else>
 				</tbody>
 			</table>
 			<div id="paginate" class="pagination" >

@@ -1,7 +1,7 @@
 dataSource {
     pooled = true
     jmxExport = true
-    driverClassName = "com.mysql.jdbc.Driver"
+    driverClassName = ""
     username = ""
     password = ""
 }
@@ -19,19 +19,19 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://localhost:3306/prizydb_development?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true"
+            url = ""
         }
     }
     test {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/prizydb_test?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true"
+            url = ""
         }
     }
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/prizydb_production?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true"
+            url = ""
             properties {
                // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
                jmxEnabled = true

@@ -15,8 +15,7 @@ class ProductController {
 
 	def index(Integer max) {
 		params.max = Math.min(max ?: 10, 100)
-		List<Product> list = productService.listProducts(params)
-		respond list, model:[productInstanceCount: list.size()]
+		respond productService.listProducts(params), model:[productInstanceCount: Product.count()]
 	}
 
 	def search(Integer max) {

@@ -17,7 +17,7 @@
 		<g:layoutHead/>
 	</head>
 	<body>
-		<div style="height: 100%" id="grailsLogo" role="banner"><a href="http://sarathisoftech.com/"><asset:image src="grails_logo.png" alt="Prizy"/></a></div>
+		<div style="height: 100%" id="grailsLogo" role="banner"><a href="${createLink(uri: '/')}"><asset:image src="grails_logo.png" alt="Prizy"/></a></div>
 		<g:layoutBody/>
 		<div class="footer" role="contentinfo"></div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>

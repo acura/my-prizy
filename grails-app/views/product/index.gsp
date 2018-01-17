@@ -34,14 +34,19 @@
 						</tr>
 					</thead>
 					<tbody>
-					<g:each in="${productInstanceList}" status="i" var="productInstance">
-						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-							<td><g:link action="show" id="${productInstance.barcode}">${fieldValue(bean: productInstance, field: "productName")}</g:link></td>
-							<td>${fieldValue(bean: productInstance, field: "description")}</td>
-							<td>${fieldValue(bean: productInstance, field: "barcode")}</td>
-						
-						</tr>
-					</g:each>
+					<g:if test="${productInstanceList == null}" >
+						<tr><td><div class="alert alert-error" style="display: block">No Products Found!</div></td></tr>
+					</g:if>
+					<g:else>
+						<g:each in="${productInstanceList}" status="i" var="productInstance">
+							<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+								<td><g:link action="show" id="${productInstance.barcode}">${fieldValue(bean: productInstance, field: "productName")}</g:link></td>
+								<td>${fieldValue(bean: productInstance, field: "description")}</td>
+								<td>${fieldValue(bean: productInstance, field: "barcode")}</td>
+							
+							</tr>
+						</g:each>
+					</g:else>
 					</tbody>
 			</table>
 			<div id="paginate" class="pagination">
