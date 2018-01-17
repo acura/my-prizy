@@ -7,6 +7,5 @@ class Price {
 
 	static constraints = {
 		price nullable:false, matches: '^[0-9]$', scale: 2
-			
 	}
 }

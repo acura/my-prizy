@@ -70,6 +70,7 @@ class ProductServiceSpec extends Specification {
 			prices.add(new BigDecimal("37")); prices.add(new BigDecimal("59"));
 			prices.add(new BigDecimal("69")); prices.add(new BigDecimal("79"));
 			prices.add(new BigDecimal("85"));
+			
 			prices.forEach {p ->
 				price = new Price(price: p, product: product)
 				service.savePrice(price)

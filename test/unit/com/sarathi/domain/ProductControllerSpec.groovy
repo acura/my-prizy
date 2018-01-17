@@ -6,6 +6,7 @@ import grails.test.mixin.*
 import spock.lang.*
 import static javax.servlet.http.HttpServletResponse.SC_METHOD_NOT_ALLOWED
 
+
 @TestFor(ProductController)
 @grails.test.mixin.Mock([Product,ProductService,Price,PriceService])
 class ProductControllerSpec extends Specification {
