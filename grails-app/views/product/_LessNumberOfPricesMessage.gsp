@@ -1,5 +1,5 @@
 <span id="calculatedPrice" style="font: bold;quotes: inherit;font-family: cursive;" class="property-value" aria-labelledby="prices-label">
-	<g:message message="Please add more than 4 prices and try again" />
+	<g:message code="add.more.than.four.prices" />
 </span>
 <g:javascript>
 $("#calculatedPrice").hover(function() {

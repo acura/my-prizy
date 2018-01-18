@@ -61,6 +61,12 @@ grails {
 
 grails.config.locations=["classpath:products.csv", "prizy-config.properties"]
 
+// database migration plugin. See grails-app/migration/ dir
+/*grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+grails.plugin.databasemigration.updateOnStart = true
+grails.plugin.databasemigration.dropOnStart = true
+grails.plugin.databasemigration.autoMigrateScripts = ['RunApp', 'TestApp']*/
+
 grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'

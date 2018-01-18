@@ -9,7 +9,7 @@
 				</thead>
 				<tbody>
 				<g:if test="${priceInstanceList.size() == 0}" >
-					<tr><td><div class="alert alert-error" style="display: block">No Prices Found!</div></td></tr>
+					<tr><td><g:message code="empty.list.message" args="['Prices']" /></td></tr>
 				</g:if>
 				<g:else>
 					<g:each in="${priceInstanceList}" status="i" var="priceInstance">

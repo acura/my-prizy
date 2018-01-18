@@ -78,7 +78,7 @@
 					<span class="property-label">
 						<g:select id="strategySelect" name="strategySelect" from="${strategyNameList}" optionValue="" noSelection="['null':'Select Strategy']"
 										onchange="calculatePrice(this.value);" /></span>
-					<span id="calculatedPrice" class="property-value" aria-labelledby="prices-label">$ 00.00</span>
+					<span id="calculatedPrice" class="property-value" aria-labelledby="prices-label"></span>
 				</li>
 				</g:if>
 				

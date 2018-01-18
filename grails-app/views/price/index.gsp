@@ -36,7 +36,7 @@
 				</thead>
 				<tbody>
 				<g:if test="${priceInstanceList == null}" >
-						<tr><td><div class="alert alert-error" style="display: block">No Price Found!</div></td></tr>
+						<tr><td><g:message code="empty.list.message" args="['Price']" /></td></tr>
 				</g:if>
 				<g:else>
 					<g:each in="${priceInstanceList}" status="i" var="priceInstance">

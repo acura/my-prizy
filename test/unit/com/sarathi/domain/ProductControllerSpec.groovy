@@ -356,7 +356,7 @@ class ProductControllerSpec extends Specification {
 			controller.calculatePrice()
 			
 		then:
-			response.text.trim().contains("Please add more than 4 prices and try again")
+			response.text.trim().contains("add.more.than.four.prices")
 			
 		when:"calculate Mean Price for testProduct"
 			params.clear()
@@ -365,7 +365,7 @@ class ProductControllerSpec extends Specification {
 			controller.calculatePrice()
 			
 		then:
-			response.text.trim().contains("Please add more than 4 prices and try again")
+			response.text.trim().contains("add.more.than.four.prices")
 		
 	}
 	

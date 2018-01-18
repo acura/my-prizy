@@ -13,7 +13,7 @@
 					</thead>
 					<tbody>
 					<g:if test="${productInstanceList.size() == 0}" >
-						<tr><td><div class="alert alert-error" style="display: block">No Products Found!</div></td></tr>
+						<tr><td><g:message code="empty.list.message" args="['Product']" /></td></tr>
 					</g:if>
 					<g:else>
 						<g:each in="${productInstanceList}" status="i" var="productInstance">

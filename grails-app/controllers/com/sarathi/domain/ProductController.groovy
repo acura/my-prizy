@@ -68,7 +68,7 @@ class ProductController {
 			packageName = packageName.split(" ")[1]
 			def price = productService.getPriceByStrategyReference(productInstance,
 					productService.getReference(packageName, strategy))
-			String strategyHint = price==-1 ? "Less than 4 prices" : productService.getStrategyHint(packageName,
+			String strategyHint = price==-1 ? message(code: 'add.more.than.four.prices') : productService.getStrategyHint(packageName,
 					strategy);
 			render(template:price==-1?'LessNumberOfPricesMessage':'strategy', model:[calculatedPrice:price,
 				strategyHint: strategyHint])
@@ -147,7 +147,6 @@ class ProductController {
 		respond productInstance
 	}
 	def savePrices() {
-		println "ProductController::: savePrices():::::"+Product.count()
 		Product productInstance = productService.findProduct(params.barcode)
 		String priceList = params.priceList
 		priceList.replace(" ", "")
