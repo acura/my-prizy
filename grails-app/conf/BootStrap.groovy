@@ -1,7 +1,8 @@
 import grails.util.Environment
 
-import com.sarathi.domain.Price
-import com.sarathi.domain.Product
+import com.prizy.domain.Price
+import com.prizy.domain.Product
+
 
 class BootStrap {
 
@@ -13,7 +14,7 @@ class BootStrap {
 		if (Environment.current != Environment.TEST) {
 			if(Product.count() == 0) {
 				
-				ClassLoader classLoader = getClass().getClassLoader();
+				/*ClassLoader classLoader = getClass().getClassLoader();
 				File file = new File(classLoader.getResource("products.csv").getFile());
 				
 				BufferedReader br = new BufferedReader(new FileReader(file))
@@ -27,7 +28,7 @@ class BootStrap {
 						price = new Price(price: getRandom(10, 100), product: product)
 						price.save()
 					}
-				}
+				}*/
 			}
 		}
 		

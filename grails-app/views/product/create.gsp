@@ -9,8 +9,7 @@
 		<a href="#create-product" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div class="nav" role="navigation">
 			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
+				<g:render template="menu_global"/>
 			</ul>
 		</div>
 		<div id="create-product" class="content scaffold-create middleDiv" role="main">
@@ -28,16 +27,16 @@
 			<g:form url="[resource:productInstance, action:'save']" >
 				<fieldset class="form">
 					<g:render template="form"/>
-					<div class="fieldcontain ${hasErrors(bean: priceInstance, field: 'price', 'error')} required">
+					<%--<div class="fieldcontain ${hasErrors(bean: priceInstance, field: 'price', 'error')} required">
 						<label for="price">
 							<g:message code="price.price.label" default="Prices List" />
 							<span class="required-indicator">*</span>
 						</label>
-						<%--<g:textArea name="price" value=""></g:textArea>--%>
+						<g:textArea name="price" value=""></g:textArea>
 						<g:textField size="50px" type="number" pattern="[0-9.,]+" required="true" class="form-control" name="priceList" value=""/>
 						<label><g:message code="price.price.label" default="Enter comma separated list of prices." /></label>
 					</div>
-				</fieldset>
+				--%></fieldset>
 				<fieldset class="buttons">
 					<g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
 				</fieldset>

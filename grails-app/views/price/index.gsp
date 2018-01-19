@@ -1,5 +1,5 @@
 
-<%@ page import="com.sarathi.domain.Price" %>
+<%@ page import="com.prizy.domain.Price" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -14,7 +14,7 @@
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 				<li style="float: right;" >
-					<g:message code="sfsdf" default="Search By Barcode : " />
+					<g:message code="search.by.barcode" default="Search By Barcode : " />
 					<input type="text" id="searchText" name="searchText" value="${searchText}" placeholder="barcode" />
 				</li>
 			</ul>
@@ -31,6 +31,8 @@
 					<tr>
 						<th><g:message code="price.product.label" default="Barcode" /></th>
 						<g:sortableColumn property="product" title="${message(code: 'price.product.label', default: 'Product')}" />
+						<g:sortableColumn property="notes" title="${message(code: 'price.notes.label', default: 'Notes')}" />
+						<g:sortableColumn property="storeName" title="${message(code: 'price.storeName.label', default: 'Store Name')}" />
 						<g:sortableColumn style="text-align: right;" property="price" title="${message(code: 'price.price.label', default: 'Price')}" />
 					</tr>
 				</thead>
@@ -43,6 +45,8 @@
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 							<td>${fieldValue(bean: priceInstance, field: "product.barcode")}</td>
 							<td>${fieldValue(bean: priceInstance, field: "product.productName")}</td>
+							<td>${fieldValue(bean: priceInstance, field: "notes")}</td>
+							<td>${fieldValue(bean: priceInstance, field: "storeName")}</td>
 							<td style="text-align: right;" ><g:link action="show" id="${priceInstance.id}" style="font: bold;font-style: italic;quotes: inherit;font-family: cursive;" >
 									<g:formatNumber number="${priceInstance?.price}" type="currency" currencySymbol="\$" currencyCode="USD"  maxFractionDigits="2" />
 							</g:link></td>

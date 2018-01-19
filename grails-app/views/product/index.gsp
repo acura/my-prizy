@@ -1,4 +1,4 @@
-<%@ page import="com.sarathi.domain.Product" %>
+<%@ page import="com.prizy.domain.Product" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -10,10 +10,9 @@
 		<a href="#list-product" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div class="nav" role="navigation">
 			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+				<g:render template="menu_global"/>
 				<li style="float: right;" >
-					<g:message code="sfsdf" default="Search By Barcode : " />
+					<g:message code="search.by.barcode" default="Search By Barcode : " />
 				<input type="text" id="searchText" name="searchText" value="${searchText}" placeholder="barcode" /></li>
 				<li>
 				</li>

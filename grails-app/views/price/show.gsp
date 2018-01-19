@@ -1,5 +1,5 @@
 
-<%@ page import="com.sarathi.domain.Price" %>
+<%@ page import="com.prizy.domain.Price" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -37,6 +37,22 @@
 					<span id="product-label" class="property-label"><g:message code="price.product.label" default="Product" /></span>
 					
 						<span class="property-value" aria-labelledby="product-label"><g:link controller="product" action="show" id="${priceInstance?.product?.barcode}">${priceInstance?.product?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+				<g:if test="${priceInstance?.notes}">
+				<li class="fieldcontain">
+					<span id="notes-label" class="property-label"><g:message code="price.notes.label" default="Notes" /></span>
+					
+						<span class="property-value" aria-labelledby="notes-label"><g:fieldValue bean="${priceInstance}" field="notes"/></span>
+					
+				</li>
+				</g:if>
+				<g:if test="${priceInstance?.storeName}">
+				<li class="fieldcontain">
+					<span id="storeName-label" class="property-label"><g:message code="price.storeName.label" default="Store Name" /></span>
+					
+						<span class="property-value" aria-labelledby="storeName-label"><g:fieldValue bean="${priceInstance}" field="storeName"/></span>
 					
 				</li>
 				</g:if>

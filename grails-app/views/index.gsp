@@ -84,19 +84,12 @@
 		</style>
 	</head>
 	<body>
-		<div id="page-body" role="main" >
-
-			<div id="controller-list" role="navigation">
-				<ul style="font-size: xx-large;" >
-					<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-					<g:if test="${c.name != 'Assets'}">
-						<g:if test="${c.name != 'Dbdoc'}">
-							<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.name}</g:link></li>
-						</g:if>
-					</g:if>
-					</g:each>
-				</ul>
-			</div>
+		<div class="nav" role="navigation">
+			<ul>
+				<g:render template="/product/menu_global"/>
+			</ul>
+		</div>
+		<div id="page-body" role="main">
 		</div>
 	</body>
 </html>

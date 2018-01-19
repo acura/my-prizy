@@ -5,6 +5,8 @@
 						<th><g:message code="price.product.barcode.label" default="Barcode" /></th>
 						<th><g:message code="price.product.label" default="Product" /></th>
 						<g:sortableColumn property="price" title="${message(code: 'price.price.label', default: 'Price')}" />
+						<g:sortableColumn property="price" title="${message(code: 'price.storeName.label', default: 'Store Name')}" />
+						<g:sortableColumn property="price" title="${message(code: 'price.notes.label', default: 'Notes')}" />
 					</tr>
 				</thead>
 				<tbody>
@@ -16,6 +18,8 @@
 					<tr align="right" class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						<td>${fieldValue(bean: priceInstance, field: "product.barcode")}</td>
 						<td>${fieldValue(bean: priceInstance, field: "product.productName")}</td>
+						<td>${fieldValue(bean: priceInstance, field: "product.storeName")}</td>
+						<td>${fieldValue(bean: priceInstance, field: "product.notes")}</td>
 						<td>
 							<g:link action="show" id="${priceInstance.id}">
 								${fieldValue(bean: priceInstance, field: "price")}

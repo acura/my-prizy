@@ -1,4 +1,4 @@
-<%@ page import="com.sarathi.domain.Price" %>
+<%@ page import="com.prizy.domain.Price" %>
 <!DOCTYPE html>
 <html>
 	<head>

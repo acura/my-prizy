@@ -1,4 +1,4 @@
-<%@ page import="com.sarathi.domain.Product" %>
+<%@ page import="com.prizy.domain.Product" %>
 
 <div class="fieldcontain ${hasErrors(bean: productInstance, field: 'productName', 'error')} required">
 	<label for="productName">
@@ -24,5 +24,22 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:textField name="barcode" maxlength="50" required="" value="${productInstance?.barcode}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: productInstance, field: 'prices', 'error')} ">
+	<label for="prices">
+		<g:message code="product.prices.label" default="Prices" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${productInstance?.prices?}" var="p">
+    <li><g:link controller="price" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="price" action="create" params="['product.id': productInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'price.label', default: 'Price')])}</g:link>
+</li>
+</ul>
 
 </div>
